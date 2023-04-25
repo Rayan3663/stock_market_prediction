@@ -2,6 +2,7 @@ import numpy as np  # linear algebra
 import pandas as pd  # data processing, CSV file I/O (e.g. pd.read_csv)
 import matplotlib.pyplot as plt
 import seaborn as sns
+from tensorflow import keras;
 from keras.models import load_model
 
 # Input data files are available in the read-only "../input/" directory
@@ -11,14 +12,14 @@ import os
 
 dataframes = []
 stock_name = []
-for dirname, _, filenames in os.walk('C:/Users/royal/OneDrive/Desktop/To_send/To_send/Data1'):
+for dirname, _, filenames in os.walk('C:/Users/S Kiran/Programs Kiran/Stock_market_predict/stock_market_prediction/To_send/Data1'):
     for filename in filenames:
         # print(os.path.join(dirname, filename))
         dataframes.append(pd.read_csv(os.path.join(dirname, filename), index_col=0))
         stock_name.append(filename)
         # print(dirname)
         # print(filename)
-dataframes = pd.read_csv('C:/Users/royal/OneDrive/Desktop/To_send/To_send/Data1/AMBIKCO.NS.csv')
+dataframes = pd.read_csv('C:/Users/S Kiran/Programs Kiran/Stock_market_predict/stock_market_prediction/To_send/Data1/AMBIKCO.NS.csv')
 stock_name = 'AMBIKCO.NS'
 dataframes['Adj Close'].plot()
 plt.ylabel('Adj Close')
@@ -51,7 +52,7 @@ j = 0;
 # for i in range(0,1):
 dataframes[['Adj Close', 'MA for 10 days', 'MA for 50 days', 'MA for 100 days', 'MA for 365 days']].plot(
     ).set_title(f"{stock_name}");
-plt.show()
+plt.savefig("C:/Users/S Kiran/Programs Kiran/Stock_market_predict/stock_market_prediction/To_send/Flask_main/templates/graph.png")
 #j = j + 1;
 #if (j == 5):
 #    k = 1;
@@ -83,8 +84,10 @@ plt.show()
 """
 ### Build LSTM Models:
 """
-from tensorflow.keras import Sequential
-from tensorflow.keras.layers import Conv2D, Flatten, Dense, LSTM
+#from tensorflow import keras;
+from tensorflow import keras 
+from keras import Sequential
+from keras.layers import Conv2D, Flatten, Dense, LSTM
 # %%
 # from keras.models import Sequential
 # from keras.layers import Dense, LSTM
@@ -230,7 +233,9 @@ def plot_predictions(stock, data, training_data_len):
     plt.plot(train['Close'])
     plt.plot(valid[['Close', 'Predictions']])
     plt.legend(['Training Data', 'Validated Data', 'Predicted Data'], loc='lower right')
-    plt.show()
+    plt.savefig("C:/Users/S Kiran/Programs Kiran/Stock_market_predict/stock_market_prediction/To_send/Flask_main/templates/graph.png")
+
+   # plt.show()
     return valid
 
 

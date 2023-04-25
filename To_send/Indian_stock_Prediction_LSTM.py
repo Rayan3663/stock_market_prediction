@@ -85,8 +85,10 @@ fig.tight_layout()
 """
 ### Build LSTM Models:
 """
-from tensorflow.keras import Sequential
-from tensorflow.keras.layers import Conv2D, Flatten, Dense, LSTM
+
+from tensorflow import keras 
+from keras import Sequential
+from keras.layers import Conv2D, Flatten, Dense, LSTM
 # %%
 #from keras.models import Sequential
 #from keras.layers import Dense, LSTM

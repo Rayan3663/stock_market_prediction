@@ -16,7 +16,7 @@
     .sidenav {
       background-color: #f1f1f1;
       height: 100%;
-      padding 15px}
+      padding: 15px}
 
       a.more-link{ background-color: #000000;
          color: white;
@@ -137,7 +137,7 @@ div {
 <div>
   <form action="/predict" method="POST">
 
-      <center><h1 style="">PREDICTION</h1></center>
+      <center><h1>PREDICTION</h1></center>
     <label for="location">Select Stock</label>
       <select id="location" name="comment">
           <option>ALKEM.NS</option>
@@ -160,6 +160,9 @@ div {
 
     <input type="Submit" value="Submit">
   </form>
+  <p>Predicted price is {{predicted_main_out}}</p>
 </div>
+<h1>Stock Market Prediction Graph</h1>
+<img src="static/assets/img/graph1.png" alt="Stock Market Prediction Graph"/>
     </body>
 </html>

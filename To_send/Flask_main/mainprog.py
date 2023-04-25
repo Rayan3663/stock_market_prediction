@@ -1,9 +1,13 @@
-from flask import Flask, render_template,request,session,flash
+from flask import Flask, render_template,request,session,flash,send_file,make_response,Response
 import sqlite3 as sql
 import os
 import pandas as pd
-from tensorflow.keras import Sequential
-from tensorflow.keras.layers import Conv2D, Flatten, Dense, LSTM
+import json
+
+
+from tensorflow import keras
+from keras import Sequential
+from keras.layers import Conv2D, Flatten, Dense, LSTM
 import random
 from sklearn.preprocessing import MinMaxScaler
 import numpy as np  # linear algebra
@@ -89,8 +93,10 @@ def predictin():
 
 
 
+
+
 @app.route('/predict',methods = ['POST', 'GET'])
-def predcrop():
+def  predrop():
     if request.method == 'POST':
         comment = request.form['comment']
         comment1 = request.form['comment1']
@@ -101,6 +107,7 @@ def predcrop():
         # type(data2)
         print(data)
         print(data1)
+        #return "helo fdajslf"
 
 
 
@@ -112,7 +119,7 @@ def predcrop():
         stock_name = []
 
         data22 = data + '.csv'
-        data33 = 'C:/Users/royal/OneDrive/Desktop/To_send/To_send/Data1/' + data22
+        data33 = 'C:/Users/S Kiran/Programs Kiran/Stock_market_predict/stock_market_prediction/To_send/Data1/' + data22
         dataframes = pd.read_csv(data33)
         stock_name = data
         dataframes['Adj Close'].plot()
@@ -125,7 +132,9 @@ def predcrop():
         plt.ylabel('Volume')
         plt.xlabel(None)
         plt.title(f"Volume of {stock_name[0]}")
-        #plt.show()
+        plt.savefig("C:/Users/S Kiran/Programs Kiran/Stock_market_predict/stock_market_prediction/To_send/Flask_main/templates/graph3.png")
+
+        plt.show()
 
         # %%
         ma_day = [10, 50, 100, 365]
@@ -314,12 +323,16 @@ def predcrop():
             plt.plot(train['Close'])
             plt.plot(valid[['Close', 'Predictions']])
             plt.legend(['Training Data', 'Validated Data', 'Predicted Data'], loc='lower right')
+            plt.savefig("C:/Users/S Kiran/Programs Kiran/Stock_market_predict/stock_market_prediction/To_send/Flask_main/templates/graph1.png")
+
             #plt.show()
+
             return valid
 
         # Test the function
         valid = plot_predictions('AMBIKCO.NS', data, training_data_len)
         print('valid',valid)
+        
 
 
         # title of our window
@@ -332,16 +345,44 @@ def predcrop():
         button = "Close"
 
         # creating a message box
-        msgbox(msg, title, button)
+        #msgbox(msg, title, button)
         response = predicted_main_out
-        return render_template('resultpred.html',prediction=response)
-        #return render_template('resultpred.html', prediction=response, price=statistics.mean(Price_Crop88), prediction1=response2, price1=statistics.mean(Price_Crop99),
+
+        predicted_main_out = predicted_main_out.astype(float)
+
+
+        # Create a dictionary to store key-value pairs
+        data_dict = {"predicted_main_out": predicted_main_out.tolist()}
+        
+
+        # Serialize the dictionary to JSON
+
+        #json_data = json.dumps(data_dict)
+        return str(data_dict)
+        
+       
+        
+        # Add additional data to the response, such as an image file
+        
+        
+        #return render_template('info.html', predicted_main_out=predicted_main_out)
                                #yeild88=statistics.mean(Yield_Crop88), yeild99 = statistics.mean(Yield_Crop99),
                                #prediction2=pred[0], price2=statistics.mean(Price_Crop1), prediction3=pred[1],
                                #price3=statistics.mean(Price_Crop2),yeild1 = statistics.mean(Yield_Crop1), yeild2 = statistics.mean(Yield_Crop2),
                                #prediction4=pred1[0], price4=statistics.mean(Price_Crop4), yeild4 = statistics.mean(Yield_Crop4),
                                #yeild5=statistics.mean(Yield_Crop5), prediction5=pred1[1],
                                #price5=statistics.mean(Price_Crop5))
+
+
+@app.route('/predictinfo/getImage')
+def get_image():
+    image_filename = 'graph.png'  
+    return send_file(image_filename, mimetype='image/png')
+
+@app.route('/predictinfo/getJson')
+def get_json():
+    json_filename = 'predicted_main_out.json'  
+    return send_file(json_filename, mimetype='application/json')
 
 
 @app.route("/logout")
